@@ -13,18 +13,29 @@ class FormActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFormBinding
 
     private fun createEvent() {
-        val db = Firebase.firestore
-
         val title = binding.editTitle.text.toString()
-        val date = Date(binding.editDate.text.toString()).time
+
+        if (title.trim() == "") {
+            binding.editTitle.error = "Preencha o campo"
+            return
+        }
+
+        val year = binding.datePicker.year
+        val month = binding.datePicker.month
+        val day = binding.datePicker.dayOfMonth
+
+        val calendar = Calendar.getInstance()
+        calendar.set(year, month, day)
+
+        val date = calendar.timeInMillis
         val event = Event(title, date)
 
+        val db = Firebase.firestore
         db
             .collection("events")
             .add(event)
             .addOnSuccessListener {
                 binding.editTitle.setText("")
-                binding.editDate.setText("")
                 Toast.makeText(this, "Evento salvo com sucesso!", Toast.LENGTH_LONG).show()
             }.addOnFailureListener {
                 Toast.makeText(this, "Erro ao salvar o evento", Toast.LENGTH_LONG).show()
