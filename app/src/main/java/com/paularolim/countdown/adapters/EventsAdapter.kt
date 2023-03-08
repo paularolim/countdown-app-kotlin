@@ -6,6 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.paularolim.countdown.databinding.EventListItemBinding
 import com.paularolim.countdown.models.Event
 import com.paularolim.countdown.utils.getDate
+import com.paularolim.countdown.utils.getDaysUntil
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit
+import java.util.Date
 
 class EventsAdapter : RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
     private var events = mutableListOf<Event>()
@@ -27,6 +31,7 @@ class EventsAdapter : RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
         val item = events[position]
         holder.binding.txtTitle.text = item.title
         holder.binding.txtDate.text = getDate(item.date.toString())
+        holder.binding.txtCountdown.text = "Faltam ${getDaysUntil(item.date)} dias"
     }
 
     override fun getItemCount() = events.size
