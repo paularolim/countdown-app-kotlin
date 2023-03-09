@@ -29,8 +29,9 @@ class EventsViewModel {
                     querySnapshot.forEach { document ->
                         list.add(
                             Event(
-                                document.data["title"].toString(),
-                                document.data["date"].toString().toLong()
+                                id = document.id,
+                                title = document.data["title"].toString(),
+                                date = document.data["date"].toString().toLong()
                             )
                         )
                     }

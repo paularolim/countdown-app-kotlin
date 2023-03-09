@@ -30,7 +30,7 @@ class FormActivity : AppCompatActivity() {
         calendar.set(year, month, day, 0, 0, 0)
 
         val date = calendar.timeInMillis
-        val event = Event(title, date)
+        val event = Event(title = title, date = date)
 
         viewModel.createEvent(event)
     }
@@ -47,6 +47,10 @@ class FormActivity : AppCompatActivity() {
 
         binding.btnSave.setOnClickListener {
             createEvent()
+        }
+
+        binding.btnDelete.setOnClickListener {
+            deleteEvent()
         }
 
         viewModel.hasError.observe(this) { state ->
@@ -67,5 +71,9 @@ class FormActivity : AppCompatActivity() {
                 binding.btnDelete.visibility = if (loading) View.INVISIBLE else View.VISIBLE
             }
         }
+    }
+
+    private fun deleteEvent() {
+        viewModel.deleteEvent()
     }
 }
