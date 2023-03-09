@@ -10,19 +10,25 @@ class CreateEventViewModel : ViewModel() {
     private val db = Firebase.firestore
 
     private val _called = MutableLiveData(false)
+    private val _loading = MutableLiveData(false)
     private val _error = MutableLiveData<Boolean>(null)
 
     val hasError = PairMediatorLiveData(_called, _error)
+    val loading get() = _loading
 
     fun createEvent(event: Event) {
+        _loading.postValue(true)
         _called.postValue(true)
+
         db
             .collection("events")
             .add(event)
             .addOnSuccessListener {
                 _error.postValue(false)
+                _loading.postValue(false)
             }.addOnFailureListener {
                 _error.postValue(true)
+                _loading.postValue(false)
             }
     }
 }

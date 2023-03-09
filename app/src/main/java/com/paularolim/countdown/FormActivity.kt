@@ -1,13 +1,14 @@
 package com.paularolim.countdown
 
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.paularolim.countdown.databinding.ActivityFormBinding
 import com.paularolim.countdown.models.Event
 import com.paularolim.countdown.viewmodels.CreateEventViewModel
 import java.util.*
-import androidx.lifecycle.Observer
 
 class FormActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFormBinding
@@ -46,7 +47,7 @@ class FormActivity : AppCompatActivity() {
             createEvent()
         }
 
-        viewModel.hasError.observe(this, Observer { state ->
+        viewModel.hasError.observe(this) { state ->
             val (called, error) = state
             if (called == true && error == true) {
                 Toast.makeText(this, "Erro ao salvar o evento", Toast.LENGTH_LONG).show()
@@ -54,6 +55,12 @@ class FormActivity : AppCompatActivity() {
                 binding.editTitle.setText("")
                 Toast.makeText(this, "Evento salvo com sucesso!", Toast.LENGTH_LONG).show()
             }
-        })
+        }
+
+        viewModel.loading.observe(this) { loading ->
+            Log.i("FormActivity", "loading $loading")
+            binding.progressBar.visibility = if (loading) View.VISIBLE else View.INVISIBLE
+            binding.btnSave.visibility = if (loading) View.INVISIBLE else View.VISIBLE
+        }
     }
 }
