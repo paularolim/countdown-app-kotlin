@@ -2,13 +2,12 @@ package com.paularolim.countdown.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.paularolim.countdown.models.Event
+import com.paularolim.countdown.repositories.EventsRepository
 
 private const val TAG = "EventsViewModel"
 
-class EventsViewModel {
+class EventsViewModel(private val repository: EventsRepository) {
     private val _events = MutableLiveData<List<Event>>()
 
     val events get() = _events
@@ -18,30 +17,12 @@ class EventsViewModel {
     }
 
     fun getEvents() {
-        val db = Firebase.firestore
-        val docRef = db.collection("events")
-
-        docRef
-            .get()
-            .addOnSuccessListener { querySnapshot ->
-                if (querySnapshot != null) {
-                    var list: MutableList<Event> = mutableListOf()
-                    querySnapshot.forEach { document ->
-                        list.add(
-                            Event(
-                                id = document.id,
-                                title = document.data["title"].toString(),
-                                date = document.data["date"].toString().toLong()
-                            )
-                        )
-                    }
-                    _events.postValue(list)
-                } else {
-                    Log.d(TAG, "No such document")
-                }
+        try {
+            repository.getEvents { data ->
+                _events.postValue(data)
             }
-            .addOnFailureListener { exception ->
-                Log.d(TAG, "get failed with ", exception)
-            }
+        } catch (exception: Error) {
+            Log.d(TAG, "get failed with ", exception)
+        }
     }
 }

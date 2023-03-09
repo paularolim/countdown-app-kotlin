@@ -5,11 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.paularolim.countdown.activities.DetailActivity
 import com.paularolim.countdown.adapters.EventsAdapter
 import com.paularolim.countdown.databinding.ActivityMainBinding
 import com.paularolim.countdown.models.Event
-import com.paularolim.countdown.utils.getDate
+import com.paularolim.countdown.repositories.EventsRepository
 import com.paularolim.countdown.utils.getDaysUntil
 import com.paularolim.countdown.viewmodels.EventsViewModel
 
@@ -17,7 +19,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: EventsAdapter
 
-    private val viewModel = EventsViewModel()
+    private val db = Firebase.firestore
+    private val repository = EventsRepository(db)
+    private val viewModel = EventsViewModel(repository)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
