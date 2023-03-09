@@ -23,8 +23,13 @@ class FormViewModel : ViewModel() {
         _loading.postValue(true)
         _called.postValue(true)
 
+        val data = hashMapOf<String, Any>(
+            "title" to event.title,
+            "date" to event.date
+        )
+
         ref
-            .add(event)
+            .add(data)
             .addOnSuccessListener {
                 _error.postValue(false)
                 _loading.postValue(false)
@@ -66,7 +71,7 @@ class FormViewModel : ViewModel() {
                 _error.postValue(false)
                 _loading.postValue(false)
             }
-            .addOnFailureListener { e ->
+            .addOnFailureListener {
                 _error.postValue(true)
                 _loading.postValue(false)
             }
