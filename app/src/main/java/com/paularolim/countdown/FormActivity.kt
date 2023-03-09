@@ -3,14 +3,16 @@ package com.paularolim.countdown
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.paularolim.countdown.databinding.ActivityFormBinding
 import com.paularolim.countdown.models.Event
+import com.paularolim.countdown.viewmodels.CreateEventViewModel
 import java.util.*
+import androidx.lifecycle.Observer
 
 class FormActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFormBinding
+
+    private val viewModel = CreateEventViewModel()
 
     private fun createEvent() {
         val title = binding.editTitle.text.toString()
@@ -30,16 +32,7 @@ class FormActivity : AppCompatActivity() {
         val date = calendar.timeInMillis
         val event = Event(title, date)
 
-        val db = Firebase.firestore
-        db
-            .collection("events")
-            .add(event)
-            .addOnSuccessListener {
-                binding.editTitle.setText("")
-                Toast.makeText(this, "Evento salvo com sucesso!", Toast.LENGTH_LONG).show()
-            }.addOnFailureListener {
-                Toast.makeText(this, "Erro ao salvar o evento", Toast.LENGTH_LONG).show()
-            }
+        viewModel.createEvent(event)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,5 +45,14 @@ class FormActivity : AppCompatActivity() {
         binding.btnSave.setOnClickListener {
             createEvent()
         }
+
+        viewModel.error.observe(this, Observer {
+            if (it == true) {
+                Toast.makeText(this, "Erro ao salvar o evento", Toast.LENGTH_LONG).show()
+            } else {
+                binding.editTitle.setText("")
+                Toast.makeText(this, "Evento salvo com sucesso!", Toast.LENGTH_LONG).show()
+            }
+        })
     }
 }
