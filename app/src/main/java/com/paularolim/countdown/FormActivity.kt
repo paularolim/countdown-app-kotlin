@@ -46,10 +46,11 @@ class FormActivity : AppCompatActivity() {
             createEvent()
         }
 
-        viewModel.error.observe(this, Observer {
-            if (it == true) {
+        viewModel.hasError.observe(this, Observer { state ->
+            val (called, error) = state
+            if (called == true && error == true) {
                 Toast.makeText(this, "Erro ao salvar o evento", Toast.LENGTH_LONG).show()
-            } else {
+            } else if (called == true && error == false) {
                 binding.editTitle.setText("")
                 Toast.makeText(this, "Evento salvo com sucesso!", Toast.LENGTH_LONG).show()
             }

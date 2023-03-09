@@ -9,11 +9,13 @@ import com.paularolim.countdown.models.Event
 class CreateEventViewModel : ViewModel() {
     private val db = Firebase.firestore
 
-    private val _error = MutableLiveData<Boolean>(false)
+    private val _called = MutableLiveData(false)
+    private val _error = MutableLiveData<Boolean>(null)
 
-    val error get() = _error
+    val hasError = PairMediatorLiveData(_called, _error)
 
     fun createEvent(event: Event) {
+        _called.postValue(true)
         db
             .collection("events")
             .add(event)
