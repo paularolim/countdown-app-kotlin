@@ -40,14 +40,9 @@ class FormActivity : AppCompatActivity() {
             )
         }
 
-        binding.btnSave.setOnClickListener {
-            createEvent()
-        }
+        binding.btnSave.setOnClickListener { createEvent(editMode) }
 
-        binding.btnDelete.setOnClickListener {
-            val id = intent.getStringExtra("id") ?: ""
-            deleteEvent(id)
-        }
+        binding.btnDelete.setOnClickListener { deleteEvent() }
 
         viewModel.hasError.observe(this) { state ->
             val (called, error) = state
@@ -77,7 +72,7 @@ class FormActivity : AppCompatActivity() {
         }
     }
 
-    private fun createEvent() {
+    private fun createEvent(editMode: Boolean) {
         val title = binding.editTitle.text.toString()
 
         if (title.trim() == "") {
@@ -93,12 +88,20 @@ class FormActivity : AppCompatActivity() {
         calendar.set(year, month, day, 0, 0, 0)
 
         val date = calendar.timeInMillis
-        val event = Event(title = title, date = date)
 
-        viewModel.createEvent(event)
+        if (editMode) {
+            val id = intent.getStringExtra("id") ?: ""
+            val event = Event(id = id, title = title, date = date)
+            viewModel.updateEvent(event)
+        } else {
+            val event = Event(title = title, date = date)
+            viewModel.createEvent(event)
+        }
     }
 
-    private fun deleteEvent(id: String) {
+    private fun deleteEvent() {
+        val id = intent.getStringExtra("id") ?: ""
+
         AlertDialog
             .Builder(this)
             .setTitle("Excluir")

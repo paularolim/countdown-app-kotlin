@@ -10,6 +10,7 @@ private const val collection = "events"
 
 class FormViewModel : ViewModel() {
     private val db = Firebase.firestore
+    private val ref = db.collection(collection)
 
     private val _called = MutableLiveData(false)
     private val _loading = MutableLiveData(false)
@@ -22,9 +23,29 @@ class FormViewModel : ViewModel() {
         _loading.postValue(true)
         _called.postValue(true)
 
-        db
-            .collection(collection)
+        ref
             .add(event)
+            .addOnSuccessListener {
+                _error.postValue(false)
+                _loading.postValue(false)
+            }.addOnFailureListener {
+                _error.postValue(true)
+                _loading.postValue(false)
+            }
+    }
+
+    fun updateEvent(event: Event) {
+        _loading.postValue(true)
+        _called.postValue(true)
+
+        val updates = hashMapOf<String, Any>(
+            "title" to event.title,
+            "date" to event.date
+        )
+
+        ref
+            .document(event.id!!)
+            .update(updates)
             .addOnSuccessListener {
                 _error.postValue(false)
                 _loading.postValue(false)
@@ -38,8 +59,7 @@ class FormViewModel : ViewModel() {
         _loading.postValue(true)
         _called.postValue(true)
 
-        db
-            .collection(collection)
+        ref
             .document(id)
             .delete()
             .addOnSuccessListener {
