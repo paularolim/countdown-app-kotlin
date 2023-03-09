@@ -1,9 +1,11 @@
 package com.paularolim.countdown
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.paularolim.countdown.databinding.ActivityFormBinding
 import com.paularolim.countdown.models.Event
@@ -84,6 +86,14 @@ class FormActivity : AppCompatActivity() {
     }
 
     private fun deleteEvent(id: String) {
-        viewModel.deleteEvent(id)
+        AlertDialog
+            .Builder(this)
+            .setTitle("Excluir")
+            .setMessage("Deseja realmente excluir este evento?")
+            .setPositiveButton("Sim") { _, _ -> viewModel.deleteEvent(id) }
+            .setNegativeButton("Cancelar") { dialog, _ -> dialog.dismiss() }
+            .setCancelable(true)
+            .show()
+
     }
 }
