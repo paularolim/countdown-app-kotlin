@@ -43,6 +43,9 @@ class FormActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        val editMode = intent.getStringExtra("mode") == "edit"
+        binding.btnDelete.visibility = if (editMode) View.VISIBLE else View.GONE
+
         binding.btnSave.setOnClickListener {
             createEvent()
         }
@@ -58,9 +61,12 @@ class FormActivity : AppCompatActivity() {
         }
 
         viewModel.loading.observe(this) { loading ->
-            Log.i("FormActivity", "loading $loading")
             binding.progressBar.visibility = if (loading) View.VISIBLE else View.INVISIBLE
             binding.btnSave.visibility = if (loading) View.INVISIBLE else View.VISIBLE
+
+            if (editMode) {
+                binding.btnDelete.visibility = if (loading) View.INVISIBLE else View.VISIBLE
+            }
         }
     }
 }
