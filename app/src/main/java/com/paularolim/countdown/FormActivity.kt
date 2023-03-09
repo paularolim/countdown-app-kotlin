@@ -25,7 +25,7 @@ class FormActivity : AppCompatActivity() {
         val day = binding.datePicker.dayOfMonth
 
         val calendar = Calendar.getInstance()
-        calendar.set(year, month, day)
+        calendar.set(year, month, day, 0, 0, 0)
 
         val date = calendar.timeInMillis
         val event = Event(title, date)
