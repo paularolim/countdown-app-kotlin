@@ -1,5 +1,6 @@
 package com.paularolim.countdown
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -50,16 +51,25 @@ class FormActivity : AppCompatActivity() {
         }
 
         binding.btnDelete.setOnClickListener {
-            deleteEvent()
+            val id = intent.getStringExtra("id") ?: ""
+            deleteEvent(id)
         }
 
         viewModel.hasError.observe(this) { state ->
             val (called, error) = state
             if (called == true && error == true) {
-                Toast.makeText(this, "Erro ao salvar o evento", Toast.LENGTH_LONG).show()
+                val message = if (editMode) "Erro ao excluir evento" else "Erro ao salvar o evento"
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show()
             } else if (called == true && error == false) {
-                binding.editTitle.setText("")
-                Toast.makeText(this, "Evento salvo com sucesso!", Toast.LENGTH_LONG).show()
+                if (editMode) {
+                    Toast.makeText(this, "Evento excluido com sucesso!", Toast.LENGTH_LONG).show()
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    startActivity(intent)
+                } else {
+                    binding.editTitle.setText("")
+                    Toast.makeText(this, "Evento salvo com sucesso!", Toast.LENGTH_LONG).show()
+                }
             }
         }
 
@@ -73,7 +83,7 @@ class FormActivity : AppCompatActivity() {
         }
     }
 
-    private fun deleteEvent() {
-        viewModel.deleteEvent()
+    private fun deleteEvent(id: String) {
+        viewModel.deleteEvent(id)
     }
 }

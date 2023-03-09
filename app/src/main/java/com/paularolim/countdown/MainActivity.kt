@@ -54,6 +54,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun navigateToDetail(event: Event) {
         val intent = Intent(this, DetailActivity::class.java)
+        intent.putExtra("id", event.id)
         intent.putExtra("title", event.title)
         intent.putExtra("date", getDate(event.date.toString()))
         intent.putExtra("days", getDaysUntil(event.date).toString())

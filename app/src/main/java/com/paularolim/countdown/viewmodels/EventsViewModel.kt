@@ -6,7 +6,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.paularolim.countdown.models.Event
 
-const val TAG = "EventsViewModel"
+private const val TAG = "EventsViewModel"
 
 class EventsViewModel {
     private val _events = MutableLiveData<List<Event>>()

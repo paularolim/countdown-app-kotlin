@@ -34,7 +34,21 @@ class FormViewModel : ViewModel() {
             }
     }
 
-    fun deleteEvent() {
-        db.collection(collection)
+    fun deleteEvent(id: String) {
+        _loading.postValue(true)
+        _called.postValue(true)
+
+        db
+            .collection(collection)
+            .document(id)
+            .delete()
+            .addOnSuccessListener {
+                _error.postValue(false)
+                _loading.postValue(false)
+            }
+            .addOnFailureListener { e ->
+                _error.postValue(true)
+                _loading.postValue(false)
+            }
     }
 }

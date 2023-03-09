@@ -16,13 +16,14 @@ class DetailActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        val id = intent.getStringExtra("id") ?: ""
         val title = intent.getStringExtra("title") ?: ""
         val date = intent.getStringExtra("date") ?: ""
         val days = intent.getStringExtra("days") ?: ""
 
         setData(title, date, days)
 
-        binding.btnDetailEdit.setOnClickListener { navigateToForm(title, date) }
+        binding.btnDetailEdit.setOnClickListener { navigateToForm(id, title, date) }
     }
 
     private fun setData(title: String, date: String, days: String) {
@@ -31,9 +32,10 @@ class DetailActivity : AppCompatActivity() {
         binding.txtDetailDays.text = days
     }
 
-    private fun navigateToForm(title: String, date: String) {
+    private fun navigateToForm(id: String, title: String, date: String) {
         val intent = Intent(this, FormActivity::class.java)
         intent.putExtra("mode", "edit")
+        intent.putExtra("id", id)
         intent.putExtra("title", title)
         intent.putExtra("date", date)
         startActivity(intent)
