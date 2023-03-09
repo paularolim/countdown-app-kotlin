@@ -2,32 +2,27 @@ package com.paularolim.countdown.repositories
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.paularolim.countdown.models.Event
+import kotlinx.coroutines.tasks.await
 
 private const val collection = "events"
 
 class EventsRepository(firestore: FirebaseFirestore) {
     private val ref = firestore.collection(collection)
 
-    private val events: MutableList<Event> = mutableListOf()
-
-    fun getEvents(callback: (List<Event>) -> Unit) {
-        ref.get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    for (document in task.result) {
-                        events.add(
-                            Event(
-                                id = document.id,
-                                title = document.data["title"].toString(),
-                                date = document.data["date"].toString().toLong()
-                            )
-                        )
-                    }
-                    callback(events)
+    suspend fun getEvents(): MutableList<Event> {
+        val events: MutableList<Event> = mutableListOf()
+        ref.get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                for (item in task.result) {
+                    val event = Event(
+                        id = item.id,
+                        title = item.data["title"] as String,
+                        date = item.data["date"] as Long
+                    )
+                    events.add(event)
                 }
             }
-            .addOnFailureListener {
-                throw Error(it)
-            }
+        }.await()
+        return events
     }
 }
