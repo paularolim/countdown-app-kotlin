@@ -27,6 +27,7 @@
         </activity>
 
         <activity android:name=".FormActivity" />
+        <activity android:name=".activities.DetailActivity" />
 
     </application>
 
