@@ -17,7 +17,7 @@ class EventsViewModel {
         getEvents()
     }
 
-    private fun getEvents() {
+    fun getEvents() {
         val db = Firebase.firestore
         val docRef = db.collection("events")
 

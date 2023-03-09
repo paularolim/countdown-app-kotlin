@@ -34,4 +34,9 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
+    override fun onRestart() {
+        super.onRestart()
+        viewModel.getEvents()
+    }
 }
