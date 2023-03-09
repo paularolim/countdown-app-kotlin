@@ -1,6 +1,5 @@
 package com.paularolim.countdown
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -16,27 +15,6 @@ class FormActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFormBinding
 
     private val viewModel = FormViewModel()
-
-    private fun createEvent() {
-        val title = binding.editTitle.text.toString()
-
-        if (title.trim() == "") {
-            binding.editTitle.error = "Preencha o campo"
-            return
-        }
-
-        val year = binding.datePicker.year
-        val month = binding.datePicker.month
-        val day = binding.datePicker.dayOfMonth
-
-        val calendar = Calendar.getInstance()
-        calendar.set(year, month, day, 0, 0, 0)
-
-        val date = calendar.timeInMillis
-        val event = Event(title = title, date = date)
-
-        viewModel.createEvent(event)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,6 +61,27 @@ class FormActivity : AppCompatActivity() {
                 binding.btnDelete.visibility = if (loading) View.INVISIBLE else View.VISIBLE
             }
         }
+    }
+
+    private fun createEvent() {
+        val title = binding.editTitle.text.toString()
+
+        if (title.trim() == "") {
+            binding.editTitle.error = "Preencha o campo"
+            return
+        }
+
+        val year = binding.datePicker.year
+        val month = binding.datePicker.month
+        val day = binding.datePicker.dayOfMonth
+
+        val calendar = Calendar.getInstance()
+        calendar.set(year, month, day, 0, 0, 0)
+
+        val date = calendar.timeInMillis
+        val event = Event(title = title, date = date)
+
+        viewModel.createEvent(event)
     }
 
     private fun deleteEvent(id: String) {
