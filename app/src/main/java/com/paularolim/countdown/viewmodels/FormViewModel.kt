@@ -6,7 +6,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.paularolim.countdown.models.Event
 
-class CreateEventViewModel : ViewModel() {
+class FormViewModel : ViewModel() {
     private val db = Firebase.firestore
 
     private val _called = MutableLiveData(false)

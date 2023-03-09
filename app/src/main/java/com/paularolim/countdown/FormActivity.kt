@@ -1,19 +1,18 @@
 package com.paularolim.countdown
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.paularolim.countdown.databinding.ActivityFormBinding
 import com.paularolim.countdown.models.Event
-import com.paularolim.countdown.viewmodels.CreateEventViewModel
+import com.paularolim.countdown.viewmodels.FormViewModel
 import java.util.*
 
 class FormActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFormBinding
 
-    private val viewModel = CreateEventViewModel()
+    private val viewModel = FormViewModel()
 
     private fun createEvent() {
         val title = binding.editTitle.text.toString()
