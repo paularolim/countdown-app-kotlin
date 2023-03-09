@@ -7,14 +7,15 @@ import com.paularolim.countdown.databinding.EventListItemBinding
 import com.paularolim.countdown.models.Event
 import com.paularolim.countdown.utils.getDate
 import com.paularolim.countdown.utils.getDaysUntil
-import java.time.LocalDate
-import java.time.temporal.ChronoUnit
-import java.util.Date
 
-class EventsAdapter : RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
+class EventsAdapter(private val onClickListener: OnClickListener) : RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
     private var events = mutableListOf<Event>()
 
-    class ViewHolder(val binding: EventListItemBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ViewHolder(val binding: EventListItemBinding) : RecyclerView.ViewHolder(binding.root)
+
+    class OnClickListener(val clickListener: (event: Event) -> Unit) {
+        fun onClick(event: Event) = clickListener(event)
+    }
 
     fun setList(events: List<Event>) {
         this.events = events.toMutableList()
@@ -32,6 +33,9 @@ class EventsAdapter : RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
         holder.binding.txtTitle.text = item.title
         holder.binding.txtDate.text = getDate(item.date.toString())
         holder.binding.txtCountdown.text = "Faltam ${getDaysUntil(item.date)} dias"
+        holder.binding.eventItem.setOnClickListener {
+            onClickListener.onClick(item)
+        }
     }
 
     override fun getItemCount() = events.size
