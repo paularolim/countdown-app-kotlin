@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.paularolim.countdown.FormActivity
 import com.paularolim.countdown.databinding.ActivityDetailBinding
+import com.paularolim.countdown.utils.getDate
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
@@ -28,7 +29,7 @@ class DetailActivity : AppCompatActivity() {
 
     private fun setData(title: String, date: String, days: String) {
         binding.txtDetailTitle.text = title
-        binding.txtDetailDate.text = date
+        binding.txtDetailDate.text = getDate(date)
         binding.txtDetailDays.text = days
     }
 

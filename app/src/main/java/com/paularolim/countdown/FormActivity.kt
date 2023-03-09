@@ -24,7 +24,21 @@ class FormActivity : AppCompatActivity() {
         setContentView(view)
 
         val editMode = intent.getStringExtra("mode") == "edit"
+        val date = intent.getStringExtra("date")
+        val title = intent.getStringExtra("title")
+
         binding.btnDelete.visibility = if (editMode) View.VISIBLE else View.GONE
+        binding.editTitle.setText(title ?: "")
+
+        if (date != null && date.isNotBlank()) {
+            val calendar = Calendar.getInstance()
+            calendar.timeInMillis = date.toLong()
+            binding.datePicker.updateDate(
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DATE)
+            )
+        }
 
         binding.btnSave.setOnClickListener {
             createEvent()

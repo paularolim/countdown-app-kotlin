@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, DetailActivity::class.java)
         intent.putExtra("id", event.id)
         intent.putExtra("title", event.title)
-        intent.putExtra("date", getDate(event.date.toString()))
+        intent.putExtra("date", event.date.toString())
         intent.putExtra("days", getDaysUntil(event.date).toString())
         startActivity(intent)
     }
